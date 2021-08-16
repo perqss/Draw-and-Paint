@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Draw and Paint</string>
+    <string name="eraser_width">Pick your eraser size</string>
+    <string name="stroke_width">Pick your stroke size</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+</resources>

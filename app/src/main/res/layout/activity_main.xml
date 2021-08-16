@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.14285714285"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.28571428571"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.42857142857" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.57142857142"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.71428571428"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verGuideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85714285714"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horGuideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horGuideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <ImageButton
+        android:id="@+id/btnUndo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_undo"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toEndOf="@+id/verGuideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnRedo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_redo"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline2"
+        app:layout_constraintStart_toEndOf="@id/verGuideline1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_save"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline3"
+        app:layout_constraintStart_toEndOf="@id/verGuideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnLoad"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/img"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline4"
+        app:layout_constraintStart_toEndOf="@id/verGuideline3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnBrush"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_brush"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline5"
+        app:layout_constraintStart_toEndOf="@id/verGuideline4"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnClear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_clear"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/verGuideline6"/>
+
+
+    <ImageButton
+        android:id="@+id/btnPalette"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_palette"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline6"
+        app:layout_constraintStart_toEndOf="@id/verGuideline5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnEraser"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/img_5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline1"
+        app:layout_constraintTop_toBottomOf="@id/horGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline2"/>
+
+    <com.example.drawandpaint.PaintView
+        android:id="@+id/paintView"
+        style="@style/paintViewColour"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/horGuideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imgCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_circle"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/paintView"
+        app:layout_constraintTop_toTopOf="@id/paintView"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
