@@ -4,4 +4,15 @@
     <string name="stroke_width">Pick your stroke size</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
+    <string name="font">Choose font</string>
+    <string name="size">Choose text size</string>
+    <string name="location">After closing this alert dialog, click on the location you want the text to appear</string>
+    <string name="enter_text">Enter Text</string>
+    <string-array name="fonts">
+        <item>adamina</item>
+        <item>amaranth</item>
+        <item>cardo</item>
+        <item>damion</item>
+        <item>space_mono</item>
+    </string-array>
 </resources>

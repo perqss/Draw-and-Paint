@@ -4,13 +4,13 @@ import android.graphics.Path;
 
 public class Stroke
 {
-    public int colour;
+    public int color;
     public float width;
     public Path path;
 
-    public Stroke(int colour, float width, Path path)
+    public Stroke(int color, float width, Path path)
     {
-        this.colour = colour;
+        this.color = color;
         this.width = width;
         this.path = path;
     }
