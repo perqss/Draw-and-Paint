@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
-    android:background="@color/white"
+    style="@style/layoutColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -13,42 +13,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.14285714285"/>
+        app:layout_constraintGuide_percent="0.16666666666666"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verGuideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.28571428571"/>
+        app:layout_constraintGuide_percent="0.3333333333333"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verGuideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.42857142857" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verGuideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.57142857142"/>
+        app:layout_constraintGuide_percent="0.666666666666"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verGuideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.71428571428"/>
+        app:layout_constraintGuide_percent="0.833333333333"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verGuideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85714285714"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horGuideline1"
@@ -125,10 +119,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_clear"
-        app:layout_constraintBottom_toTopOf="@id/horGuideline1"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline2"
+        app:layout_constraintTop_toTopOf="@id/horGuideline1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/verGuideline6"/>
+        app:layout_constraintStart_toEndOf="@id/verGuideline5"/>
 
 
     <ImageButton
@@ -138,7 +132,7 @@
         android:layout_height="0dp"
         android:src="@drawable/ic_palette"
         app:layout_constraintBottom_toTopOf="@id/horGuideline1"
-        app:layout_constraintEnd_toStartOf="@id/verGuideline6"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/verGuideline5"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -186,7 +180,16 @@
         app:layout_constraintBottom_toTopOf="@id/horGuideline2"
         android:src="@drawable/ic_line" />
 
-
+    <ImageButton
+        android:id="@+id/btnRectangle"
+        android:backgroundTint="@color/blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toStartOf="@id/verGuideline5"
+        app:layout_constraintTop_toBottomOf="@id/horGuideline1"
+        app:layout_constraintBottom_toTopOf="@id/horGuideline2"
+        app:layout_constraintStart_toEndOf="@id/verGuideline4"
+        android:src="@drawable/ic_rectangle" />
 
     <com.example.drawandpaint.PaintView
         android:id="@+id/paintView"

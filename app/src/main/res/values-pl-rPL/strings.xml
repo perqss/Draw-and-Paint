@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Draw and Paint</string>
+    <string name="eraser_width">Wybierz rozmiar gumki</string>
+    <string name="stroke_width">Wybierz rozmiar pędzla</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Anuluj</string>
+    <string name="font">Wybierz czcionkę</string>
+    <string name="size">Wybierz rozmiar tekstu</string>
+    <string name="location">Po zamknięciu okna, wybierz miejsce w którym ma pojawić się Twój tekst</string>
+    <string name="enter_text">Wprowadź tekst</string>
+    <string name="clear_message">Czy chcesz trwale usunąć swój rysunek?</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+</resources>

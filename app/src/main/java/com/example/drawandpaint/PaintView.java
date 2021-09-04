@@ -3,7 +3,6 @@ package com.example.drawandpaint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -12,41 +11,37 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class PaintView extends View
 {
     private static final float TOUCH_TOLERANCE = 4;
     private float mX, mY;
-    private Path mPath, pathToUndo, pathToRedo;
+    private Path mPath;
     private Paint mPaint;
-    private ArrayList<Stroke> strokes = new ArrayList<>();
-    private ArrayList<Stroke> undoneStrokes = new ArrayList<>();
+    private final Stack<Image> images = new Stack<>();
+    private final Stack<Image> undoneImages = new Stack<>();
     private int mBrushColor;
     private float mStrokeWidth;
     private int mEraserColor;
     private float mEraserWidth;
     private int mOldBrushColor;
+    private int mFillColor;
     private float mOldStrokeWidth;
-    private Bitmap mBitmap, mBitmapBackup, mLoadedBitmap;
-    private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private Bitmap mBitmap;
+    private final Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
     private Context mContext;
-    private Canvas mCanvas, mBitmapBackupCanvas;
+    private Canvas mCanvas;
     private boolean mClear = false;
     private int mBackgroundColor;
-    private boolean mEraseMode = false, mTxtMode = false, mCircleMode = false, mLineMode = false, mColorFillMode = false;
-    private boolean mLineFlag = false; // flag to indicate whether the move in touch move was the first move of drawing the line
-    private boolean mCircleFlag = false; // same as above but with the circle
-    private ImageView imgCircle;
+    private boolean mEraseMode = false, mTxtMode = false, mCircleMode = false, mLineMode = false, mColorFillMode = false, mRectangleMode = false;
     private int mWidth, mHeight;
-    private EditText mEditText;
-    private float radius;
 
     public PaintView(Context context)
     {
@@ -67,12 +62,7 @@ public class PaintView extends View
         mPaint.setStrokeWidth(8);
         mContext = context;
         mBackgroundColor = getResources().getColor(R.color.white);
-        //mPaint.setAlpha(0xff);
-    }
-
-    public void setEraser(ImageView imageView)
-    {
-        imgCircle = imageView;
+        mFillColor = getResources().getColor(R.color.black);
     }
 
     public void init(int height, int width)
@@ -80,9 +70,10 @@ public class PaintView extends View
         mHeight = height;
         mWidth = width;
         mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        mLoadedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         mCanvas = new Canvas(mBitmap);
+        mCanvas.drawColor(mBackgroundColor);
         mBrushColor = getResources().getColor(R.color.black);
+        images.push(new Image(mBitmap));
     }
 
     public void setColor(int color)
@@ -112,13 +103,25 @@ public class PaintView extends View
         mColorFillMode = mode;
     }
 
-    public void setBitmap(Bitmap bitmap)
+    public void setFillColor(int color)
+    {
+        mFillColor = color;
+    }
+
+    public int getFillColor()
+    {
+        return mFillColor;
+    }
+
+    public void setBitmap(Bitmap bitmap) // set bitmap passed as an argument as the main bitmap
     {
         Bitmap workingBitmap = Bitmap.createBitmap(bitmap);
         Bitmap mutableBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
         mBitmap = mutableBitmap;
-        mLoadedBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
         mCanvas = new Canvas(mutableBitmap);
+        mPath.reset();
+        images.push(new Image(mBitmap));
+        invalidate();
     }
 
     public void setBackgroundColor(int color)
@@ -127,54 +130,48 @@ public class PaintView extends View
         invalidate();
     }
 
-    public void setEditText(EditText editText)
-    {
-        mEditText = editText;
-    }
-
     public int getBackgroundColor()
     {
         return mBackgroundColor;
     }
 
-    public void undo()
+    public void drawCurrentPathOnTheMostRecentBitmap()
     {
-        if (!strokes.isEmpty())
+        if (!images.isEmpty())
         {
-            undoneStrokes.add(strokes.remove(strokes.size() - 1));
-            mCanvas.drawColor(mBackgroundColor);
-            mCanvas.drawBitmap(mLoadedBitmap, 0, 0, mBitmapPaint);
+            mCanvas.drawBitmap(images.peek().bitmap, 0, 0, mBitmapPaint);
+            mCanvas.drawPath(mPath, mPaint);
             mPath.reset();
-            for (Stroke stroke : strokes)
-            {
-                mPaint.setColor(stroke.color);
-                mPaint.setStrokeWidth(stroke.width);
-                mCanvas.drawPath(stroke.path, mPaint);
-            }
         }
-
         else
-        {
             mCanvas.drawColor(mBackgroundColor);
-        }
 
         invalidate();
     }
 
+    public void undo()
+    {
+        if (!images.isEmpty())
+        {
+            mPath.reset();
+            if (images.size() > 1) // don't remove the first element, as it is the default bitmap with selected background color
+                undoneImages.push(images.pop());
+
+            Bitmap lastBitmap = images.peek().bitmap;
+            mCanvas.drawBitmap(lastBitmap, 0, 0, mBitmapPaint);
+            invalidate();
+        }
+    }
+
     public void redo()
     {
-        if (!undoneStrokes.isEmpty())
+        if (!undoneImages.isEmpty())
         {
-            strokes.add(undoneStrokes.remove(undoneStrokes.size() - 1));
-            mCanvas.drawColor(mBackgroundColor);
-            mCanvas.drawBitmap(mLoadedBitmap, 0, 0, mBitmapPaint);
+            Bitmap lastBitmap = undoneImages.peek().bitmap;
+            images.push(undoneImages.pop());
             mPath.reset();
-            for (Stroke stroke : strokes)
-            {
-                mPaint.setColor(stroke.color);
-                mPaint.setStrokeWidth(stroke.width);
-                mCanvas.drawPath(stroke.path, mPaint);
-            }
+            mCanvas.drawBitmap(lastBitmap, 0, 0, mBitmapPaint);
+            invalidate();
         }
     }
 
@@ -200,7 +197,6 @@ public class PaintView extends View
         mEraseMode = true;
         mEraserColor = mBackgroundColor;
         mEraserWidth = 8;
-        //imgCircle.setVisibility(VISIBLE);
     }
 
     public void setEraserWidth(float eraserWidth)
@@ -218,7 +214,12 @@ public class PaintView extends View
         mLineMode = lineMode;
     }
 
-    public Bitmap floodFill(Bitmap  image, Point node, int targetColor, int replacementColor)
+    public void setRectangleMode(boolean rectangleMode)
+    {
+        mRectangleMode = rectangleMode;
+    }
+
+    public Bitmap floodFill(Bitmap  image, Point node, int targetColor, int replacementColor) // color filling algorithm, returns colored bitmap
     {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -268,24 +269,17 @@ public class PaintView extends View
     @Override
     protected void onDraw(Canvas canvas)
     {
-        if (mClear) // clear canvas and reset arraylists
+        if (mClear) // clear canvas and reset image stack
         {
-            mCanvas.drawColor(mBackgroundColor);
-            mPath.reset();
-            undoneStrokes.clear();
-            strokes.clear();
-            mClear = false;
-            mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888); // reset bitmap
-            mLoadedBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+            mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
+            mCanvas.drawColor(mBackgroundColor);
+            images.clear();
+            undoneImages.clear();
+            images.push(new Image(mBitmap));
+            mPath.reset();
+            mClear = false;
             return;
-        }
-
-        for (Stroke stroke : strokes)
-        {
-            mPaint.setColor(stroke.color);
-            mPaint.setStrokeWidth(stroke.width);
-            mCanvas.drawPath(stroke.path, mPaint);
         }
 
         if (mEraseMode) // if we want to erase, set color of the brush to background color and width to the value chosen with slider
@@ -304,7 +298,7 @@ public class PaintView extends View
         mPaint.setColor(mBrushColor);
         mPaint.setStrokeWidth(mStrokeWidth);
         mCanvas.drawPath(mPath, mPaint);
-        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint); // draw the main bitmap on canvas
     }
 
     @Override
@@ -315,22 +309,14 @@ public class PaintView extends View
 
     private void touchStart(float x, float y)
     {
-       /* if (mTxtMode)
-        {
-            mEditText.setVisibility(VISIBLE);
-            mEditText.setX(x);
-            mEditText.setY(y);
-        }*/
-
         if (mColorFillMode)
         {
-            Bitmap filledBitmap = floodFill(mBitmap, new Point((int) x, (int) y), mBitmap.getPixel((int) x, (int) y), Color.BLACK);
+            // fill bitmap with color and set it as the main
+            Bitmap filledBitmap = floodFill(mBitmap, new Point((int) x, (int) y), mBitmap.getPixel((int) x, (int) y), mFillColor);
             setBitmap(filledBitmap);
             return;
         }
 
-        mCircleFlag = mCircleMode;
-        mLineFlag = mLineMode;
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
@@ -347,31 +333,36 @@ public class PaintView extends View
 
         if (mCircleMode)
         {
-            radius = (float) Math.sqrt(dx * dx + dy * dy);
-            // don't undo if this is the first move of drawing a new circle, because the previous circle will be removed
-            if (!mCircleFlag)
-                undo();
-            else
-                mCircleFlag = false;
-
+            float radius = (float) Math.sqrt(dx * dx + dy * dy); // calculate radius of the circle
+            drawCurrentPathOnTheMostRecentBitmap();
             mPath.addCircle(mX, mY, radius, Path.Direction.CW);
-            strokes.add(new Stroke(mBrushColor, mStrokeWidth, mPath));
         }
 
         else if (mLineMode)
         {
-            if (!mLineFlag)
-                undo();
-            else
-                mLineFlag = false;
-
+            drawCurrentPathOnTheMostRecentBitmap();
             mPath.moveTo(mX, mY);
             mPath.lineTo(x, y);
-            strokes.add(new Stroke(mBrushColor, mStrokeWidth, mPath));
+        }
+
+        else if (mRectangleMode)
+        {
+            drawCurrentPathOnTheMostRecentBitmap();
+            // draws a rectangle
+            mPath.moveTo(mX, mY);
+            mPath.lineTo(x, mY);
+            mPath.moveTo(x, mY);
+            mPath.lineTo(x, y);
+            mPath.moveTo(mX, mY);
+            mPath.lineTo(mX, y);
+            mPath.moveTo(mX, y);
+            mPath.lineTo(x, y);
+            mPath.moveTo(x, y);
         }
 
         else
         {
+            // draws path, which is not a circle, line or a rectangle
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE)
             {
                 mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
@@ -384,18 +375,10 @@ public class PaintView extends View
 
     private void touchUp(float x, float y)
     {
-        /*if (mCircleMode)
-            mPath.addCircle(mX, mY, radius, Path.Direction.CW);
-        else if (mLineMode)
-            mPath.lineTo(x, y);
-        else*/
-            /*mPath.lineTo(mX, mY);*/
-
         if (mColorFillMode)
             return;
-        if (!mCircleMode && !mLineMode)
-            strokes.add(new Stroke(mBrushColor, mStrokeWidth, mPath));
 
+        images.push(new Image(mBitmap)); // add the current bitmap to the bitmap stack
         mPath = new Path();
     }
 
@@ -404,13 +387,6 @@ public class PaintView extends View
     {
         float x = event.getX();
         float y = event.getY();
-
-        // makes the circle follow cursor while erasing (need to improve)
-       /* if (mEraseMode)
-        {
-            imgCircle.setX(x);
-            imgCircle.setY(y);
-        }*/
 
         switch (event.getAction())
         {
@@ -427,7 +403,6 @@ public class PaintView extends View
                 invalidate();
                 break;
         }
-
         return true;
     }
 }

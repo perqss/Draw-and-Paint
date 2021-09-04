@@ -6,14 +6,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/paint_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/paint_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DrawAndPaint">
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -48,11 +49,9 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class MainActivity extends AppCompatActivity
 {
     private PaintView paintView;
-    private ImageButton btnUndo, btnRedo, btnPalette, btnLoad, btnSave, btnBrush, btnClear, btnEraser, btnCircle, btnLine, btnFill;
+    private ImageButton btnUndo, btnRedo, btnPalette, btnLoad, btnSave, btnBrush, btnClear, btnEraser, btnCircle, btnLine, btnFill, btnRectangle;
     private float previousSliderValue;
-    private ImageView imgCircle;
     private ActivityResultLauncher<Intent> activityResultLauncher;
-    private ConstraintLayout constraintLayout;
     private int height, width;
 
     public MainActivity()
@@ -70,11 +69,10 @@ public class MainActivity extends AppCompatActivity
         btnBrush = findViewById(R.id.btnBrush);
         btnClear = findViewById(R.id.btnClear);
         btnEraser = findViewById(R.id.btnEraser);
-        imgCircle = findViewById(R.id.imgCircle);
-        constraintLayout = findViewById(R.id.constraintLayout);
         btnCircle = findViewById(R.id.btnCircle);
         btnLine = findViewById(R.id.btnLine);
         btnFill = findViewById(R.id.btnFill);
+        btnRectangle = findViewById(R.id.btnRectangle);
     }
 
     private void defaultValues()
@@ -132,7 +130,29 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                paintView.clearCanvas();
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(getResources().getString(R.string.clear_message));
+
+                builder.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        paintView.clearCanvas();
+                    }
+                });
+
+                builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 
@@ -147,7 +167,8 @@ public class MainActivity extends AppCompatActivity
                 // escape drawing circle mode
                 paintView.setCircleMode(false);
                 paintView.setColorFillMode(false);
-                imgCircle.setVisibility(View.GONE);
+                paintView.setLineMode(false);
+                paintView.setRectangleMode(false);
                 LayoutInflater layoutInflater = MainActivity.this.getLayoutInflater();
                 View layout = layoutInflater.inflate(R.layout.stroke_width_alert, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -188,6 +209,8 @@ public class MainActivity extends AppCompatActivity
                 paintView.erase();
                 paintView.setCircleMode(false);
                 paintView.setLineMode(false);
+                paintView.setRectangleMode(false);
+                paintView.setColorFillMode(false);
                 LayoutInflater layoutInflater = MainActivity.this.getLayoutInflater();
                 View layout = layoutInflater.inflate(R.layout.eraser_width_alert, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -297,81 +320,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*btnBackgroundColor.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                final AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(MainActivity.this, paintView.getBackgroundColor(), new AmbilWarnaDialog.OnAmbilWarnaListener()
-                {
-                    @Override
-                    public void onCancel(AmbilWarnaDialog dialog)
-                    {
-
-                    }
-
-                    @Override
-                    public void onOk(AmbilWarnaDialog dialog, int color)
-                    {
-                        paintView.setBackgroundColor(color);
-                        constraintLayout.setBackgroundColor(color);
-                    }
-                });
-                colorPicker.show();
-            }
-        });*/
-
-        /*btnText.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                LayoutInflater layoutInflater = MainActivity.this.getLayoutInflater();
-                View layout = layoutInflater.inflate(R.layout.text_alert, null);
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(getResources().getString(R.string.eraser_width));
-                builder.setView(layout);
-                EditText editText = layout.findViewById(R.id.editText);
-                Spinner spinnerTxtSize = layout.findViewById(R.id.spinnerTxtSize);
-                Spinner spinnerFonts = layout.findViewById(R.id.spinnerFonts);
-                ArrayList<Integer> numbers = new ArrayList<>();
-
-                for (int i=0; i<20; i++)
-                    numbers.add(i);
-
-                // fill the font spinner
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.fonts, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerFonts.setAdapter(adapter);
-
-                // fill the text size spinner
-                ArrayAdapter<Integer> txtSizeAdapter = new ArrayAdapter<Integer>(MainActivity.this, android.R.layout.simple_spinner_item, numbers);
-                txtSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerTxtSize.setAdapter(txtSizeAdapter);
-
-                if (spinnerFonts.getSelectedItem() == null)
-                {
-                    Typeface typeface = ResourcesCompat.getFont(MainActivity.this, R.font.adamina);
-
-                }
-
-                spinnerFonts.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-                    {
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent)
-                    {
-
-                    }
-                });
-            }
-        });*/
-
         btnCircle.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -381,6 +329,7 @@ public class MainActivity extends AppCompatActivity
                 paintView.setCircleMode(true);
                 paintView.setEraseMode(false);
                 paintView.setColorFillMode(false);
+                paintView.setRectangleMode(false);
             }
         });
 
@@ -393,6 +342,7 @@ public class MainActivity extends AppCompatActivity
                 paintView.setLineMode(true);
                 paintView.setEraseMode(false);
                 paintView.setColorFillMode(false);
+                paintView.setRectangleMode(false);
             }
         });
 
@@ -404,23 +354,39 @@ public class MainActivity extends AppCompatActivity
                 paintView.setColorFillMode(true);
                 paintView.setLineMode(false);
                 paintView.setEraseMode(false);
+                paintView.setCircleMode(false);
+                paintView.setRectangleMode(false);
+
+                final AmbilWarnaDialog colorPicker = new AmbilWarnaDialog(MainActivity.this, paintView.getFillColor(), new AmbilWarnaDialog.OnAmbilWarnaListener()
+                {
+                    @Override
+                    public void onCancel(AmbilWarnaDialog dialog)
+                    {
+
+                    }
+
+                    @Override
+                    public void onOk(AmbilWarnaDialog dialog, int color)
+                    {
+                        paintView.setFillColor(color);
+                    }
+                });
+                colorPicker.show();
             }
         });
-    }
 
-    private int getSelectedFont(String font)
-    {
-        switch (font)
+        btnRectangle.setOnClickListener(new View.OnClickListener()
         {
-            case "adamina":
-                return R.font.adamina;
-            case "amaranth":
-                return R.font.amaranth;
-            case "cardo":
-                return R.font.cardo;
-            default:
-                return -1;
-        }
+            @Override
+            public void onClick(View v)
+            {
+                paintView.setColorFillMode(false);
+                paintView.setLineMode(false);
+                paintView.setEraseMode(false);
+                paintView.setCircleMode(false);
+                paintView.setRectangleMode(true);
+            }
+        });
     }
 
     private void saveImageToStream(Bitmap bitmap, OutputStream outputStream)
@@ -464,8 +430,22 @@ public class MainActivity extends AppCompatActivity
 
         init();
         defaultValues();
-        paintView.setEraser(imgCircle);
         btnClicks();
+
+        // change color of canvas and brush based on mode of the app
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode)
+        {
+            case Configuration.UI_MODE_NIGHT_NO:
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                paintView.setBackgroundColor(getResources().getColor(R.color.white));
+                paintView.setColor(getResources().getColor(R.color.black));
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                paintView.setBackgroundColor(getResources().getColor(R.color.black));
+                paintView.setColor(getResources().getColor(R.color.white));
+                break;
+        }
 
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -483,7 +463,6 @@ public class MainActivity extends AppCompatActivity
                                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                 bitmap = getResizedBitmap(bitmap, height, width);
-                                //paintView.clearCanvas();
                                 paintView.setBitmap(bitmap);
                             }
                             catch (FileNotFoundException e)
@@ -503,7 +482,7 @@ public class MainActivity extends AppCompatActivity
                 paintView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 width = paintView.getMeasuredWidth();
                 height = paintView.getMeasuredHeight();
-                paintView.init(height, width);
+                paintView.init(height, width); // initialize main bitmap with measured width and height
             }
         });
     }

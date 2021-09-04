@@ -15,4 +15,7 @@
         <item>damion</item>
         <item>space_mono</item>
     </string-array>
+    <string name="clear_message">Do you want to permanently erase your drawing?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
