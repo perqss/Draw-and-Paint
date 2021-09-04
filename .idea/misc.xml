@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable-anydpi/ic_brush.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable-anydpi/ic_circle.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable-anydpi/ic_redo.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable-anydpi/ic_save.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable-anydpi/ic_undo.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/drawable/load_foreground.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/font/adamina.xml" value="0.396875" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/font/cardo.xml" value="0.396875" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/font/damion.xml" value="0.396875" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/font/space_mono.xml" value="0.396875" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/activity_settings.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/alert_dialog_clear.xml" value="0.33" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/eraser_width_alert.xml" value="0.5" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/stroke_width_alert.xml" value="0.5" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/layout/text_alert.xml" value="0.5" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/mipmap-anydpi-v26/load.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/mipmap-anydpi-v26/paint_icon.xml" value="0.3828125" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/xml/pref_screen.xml" value="0.245018115942029" />
+        <entry key="..\:/Users/Genesis/AndroidStudioProjects/DrawandPaint/app/src/main/res/xml/settings.xml" value="0.23777173913043478" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
