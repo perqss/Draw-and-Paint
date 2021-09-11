@@ -22,4 +22,9 @@
     <style name="paintViewColor" type="color">
         <item name="android:background">@color/white</item>
     </style>
+
+    <style name="buttonColor" type="color">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:tint">@color/black</item>
+    </style>
 </resources>

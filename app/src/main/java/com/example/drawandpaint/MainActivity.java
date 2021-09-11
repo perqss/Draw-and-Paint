@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -23,6 +24,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.slider.Slider;
 
@@ -43,6 +46,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
@@ -279,8 +283,10 @@ public class MainActivity extends AppCompatActivity
 
                         // close the output stream after use
                         imageOutStream.close();
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.img_saved), Toast.LENGTH_SHORT).show();
                     } catch (Exception e)
                     {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.img_saving_error), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -300,9 +306,11 @@ public class MainActivity extends AppCompatActivity
                         ContentValues values = new ContentValues();
                         values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
                         MainActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.img_saved), Toast.LENGTH_SHORT).show();
                     }
                     catch (FileNotFoundException e)
                     {
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.img_saving_error), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -431,6 +439,12 @@ public class MainActivity extends AppCompatActivity
         init();
         defaultValues();
         btnClicks();
+
+       /* else
+        {
+            init();
+            paintView.setCircleMode(true);
+        }*/
 
         // change color of canvas and brush based on mode of the app
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;

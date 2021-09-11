@@ -16,10 +16,15 @@
     </style>
 
     <style name="layoutColor" type="color">
-        <item name="backgroundColor">@color/black</item>
+        <item name="android:background">@color/black</item>
     </style>
 
     <style name="paintViewColor" type="color">
         <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="buttonColor" type="color">
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:tint">@color/white</item>
     </style>
 </resources>

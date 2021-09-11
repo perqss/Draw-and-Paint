@@ -12,4 +12,6 @@
     <string name="clear_message">Czy chcesz trwale usunąć swój rysunek?</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
+    <string name="img_saved">Obraz zapisany</string>
+    <string name="img_saving_error">Wystąpił błąd podczas zapisywania obrazu</string>
 </resources>

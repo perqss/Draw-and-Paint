@@ -9,12 +9,9 @@ import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -25,8 +22,8 @@ public class PaintView extends View
     private float mX, mY;
     private Path mPath;
     private Paint mPaint;
-    private final Stack<Image> images = new Stack<>();
-    private final Stack<Image> undoneImages = new Stack<>();
+    private Stack<Image> mImages = new Stack<>();
+    private Stack<Image> mUndoneImages = new Stack<>();
     private int mBrushColor;
     private float mStrokeWidth;
     private int mEraserColor;
@@ -35,7 +32,7 @@ public class PaintView extends View
     private int mFillColor;
     private float mOldStrokeWidth;
     private Bitmap mBitmap;
-    private final Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+    private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
     private Context mContext;
     private Canvas mCanvas;
     private boolean mClear = false;
@@ -73,13 +70,22 @@ public class PaintView extends View
         mCanvas = new Canvas(mBitmap);
         mCanvas.drawColor(mBackgroundColor);
         mBrushColor = getResources().getColor(R.color.black);
-        images.push(new Image(mBitmap));
+        mImages.push(new Image(mBitmap));
     }
 
     public void setColor(int color)
     {
         mBrushColor = color;
         mOldBrushColor = color;
+    }
+
+    public void setMostRecentBitmap()
+    {
+        if (!mImages.isEmpty())
+        {
+            Bitmap lastBitmap = mImages.peek().bitmap;
+            setBitmap(lastBitmap);
+        }
     }
 
     public int getColor()
@@ -120,7 +126,7 @@ public class PaintView extends View
         mBitmap = mutableBitmap;
         mCanvas = new Canvas(mutableBitmap);
         mPath.reset();
-        images.push(new Image(mBitmap));
+        mImages.push(new Image(mBitmap));
         invalidate();
     }
 
@@ -137,9 +143,9 @@ public class PaintView extends View
 
     public void drawCurrentPathOnTheMostRecentBitmap()
     {
-        if (!images.isEmpty())
+        if (!mImages.isEmpty())
         {
-            mCanvas.drawBitmap(images.peek().bitmap, 0, 0, mBitmapPaint);
+            mCanvas.drawBitmap(mImages.peek().bitmap, 0, 0, mBitmapPaint);
             mCanvas.drawPath(mPath, mPaint);
             mPath.reset();
         }
@@ -151,13 +157,13 @@ public class PaintView extends View
 
     public void undo()
     {
-        if (!images.isEmpty())
+        if (!mImages.isEmpty())
         {
             mPath.reset();
-            if (images.size() > 1) // don't remove the first element, as it is the default bitmap with selected background color
-                undoneImages.push(images.pop());
+            if (mImages.size() > 1) // don't remove the first element, as it is the default bitmap with selected background color
+                mUndoneImages.push(mImages.pop());
 
-            Bitmap lastBitmap = images.peek().bitmap;
+            Bitmap lastBitmap = mImages.peek().bitmap;
             mCanvas.drawBitmap(lastBitmap, 0, 0, mBitmapPaint);
             invalidate();
         }
@@ -165,10 +171,10 @@ public class PaintView extends View
 
     public void redo()
     {
-        if (!undoneImages.isEmpty())
+        if (!mUndoneImages.isEmpty())
         {
-            Bitmap lastBitmap = undoneImages.peek().bitmap;
-            images.push(undoneImages.pop());
+            Bitmap lastBitmap = mUndoneImages.peek().bitmap;
+            mImages.push(mUndoneImages.pop());
             mPath.reset();
             mCanvas.drawBitmap(lastBitmap, 0, 0, mBitmapPaint);
             invalidate();
@@ -274,9 +280,9 @@ public class PaintView extends View
             mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
             mCanvas.drawColor(mBackgroundColor);
-            images.clear();
-            undoneImages.clear();
-            images.push(new Image(mBitmap));
+            mImages.clear();
+            mUndoneImages.clear();
+            mImages.push(new Image(mBitmap));
             mPath.reset();
             mClear = false;
             return;
@@ -378,7 +384,7 @@ public class PaintView extends View
         if (mColorFillMode)
             return;
 
-        images.push(new Image(mBitmap)); // add the current bitmap to the bitmap stack
+        mImages.push(new Image(mBitmap)); // add the current bitmap to the bitmap stack
         mPath = new Path();
     }
 

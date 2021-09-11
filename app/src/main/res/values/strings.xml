@@ -18,4 +18,6 @@
     <string name="clear_message">Do you want to permanently erase your drawing?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="img_saved">Image saved</string>
+    <string name="img_saving_error">Error occurred while saving the image</string>
 </resources>
